@@ -18,13 +18,13 @@ export default function ShelfEditModal({ update }) {
         });
         modal.current.addEventListener("hidden.bs.modal", (e) => {
             setId(null);
-            path.current.value = "";
-            name.current.value = "";
+            path.current.value = '';
+            name.current.value = '';
         });
     }, []);
 
     function confirm() {
-        if (id === null) {
+        if (!id) {
             return;
         }
         editShelf(id, name.current.value).then(

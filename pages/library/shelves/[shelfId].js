@@ -3,14 +3,15 @@ import ShelfEditModal from "@/components/library/shelves/modals/ShelfEditModal";
 import ShelfDeleteModal from "@/components/library/shelves/modals/ShelfDeleteModal";
 import ShelvesContent from "@/components/library/shelves/content/ShelvesContent";
 import ShelvesList from "@/components/library/shelves/list/ShelvesList";
+import BookUpdateContext from "@/components/library/BookUpdateContext";
 import { getShelf, getShelfContent, getShelves } from "@/core/shelves";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { getBooksInShelf } from "@/api/shelves";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
-import { getBooksInShelf } from "@/api/shelves";
 
 export default function LibraryShelvesId(props) {
-    const { refresh } = props;
+    const [update, setUpdate] = useContext(BookUpdateContext);
     const [shelves, setShelves] = useState(props.shelves);
     const [shelf, setShelf] = useState(props.shelf);
     const [content, setContent] = useState(props.content);
@@ -28,19 +29,20 @@ export default function LibraryShelvesId(props) {
         setContent(props.content);
     }, [props.content]);
 
+    // Handle book add/recreate/delete
     useEffect(() => {
-        if (props.onUpdate.add) {
-            if (props.onUpdate.add.shelf === shelf.id) {
+        if (update.add) {
+            if (update.add.shelf === shelf.id) {
                 refreshContent();
             }
         }
-        if (props.onUpdate.recreate) {
+        if (update.recreate) {
             refreshContent();
         }
-        if (props.onUpdate.delete) {
+        if (update.delete) {
             refreshContent();
         }
-    }, [props.onUpdate]);
+    }, [update]);
 
     function refreshContent() {
         getBooksInShelf(shelf.id).then(
@@ -64,7 +66,7 @@ export default function LibraryShelvesId(props) {
     return (
         <>
             <Head>
-                <title>Shelf</title>
+                <title>{shelf.name}</title>
             </Head>
             <ShelfEditModal update={onShelfEdit}/>
             <ShelfDeleteModal update={onShelfDelete}/>

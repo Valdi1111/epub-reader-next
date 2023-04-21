@@ -2,13 +2,10 @@ import LibraryShelvesLayout from "@/components/library/shelves/LibraryShelvesLay
 import ShelvesList from "@/components/library/shelves/list/ShelvesList";
 import { getShelves } from "@/core/shelves";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Head from "next/head";
 
 export default function LibraryShelves(props) {
-    const { refresh } = props;
     const [shelves, setShelves] = useState([]);
-    const router = useRouter();
 
     useEffect(() => {
         setShelves(props.shelves);

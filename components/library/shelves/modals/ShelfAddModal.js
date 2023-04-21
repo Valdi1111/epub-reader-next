@@ -11,8 +11,8 @@ export default function ShelfAddModal({ update }) {
             path.current.focus();
         });
         modal.current.addEventListener("hidden.bs.modal", (e) => {
-            path.current.value = "";
-            name.current.value = "";
+            path.current.value = '';
+            name.current.value = '';
         });
     }, []);
 

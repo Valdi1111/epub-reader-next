@@ -4,16 +4,16 @@ import { getMetadata } from "@/api/book";
 import Image from "next/image";
 
 export default function BookInfoModal() {
-    const [path, setPath] = useState("");
+    const [path, setPath] = useState('');
     const [cover, setCover] = useState(MISSING_COVER_URL);
-    const [title, setTitle] = useState("");
-    const [creator, setCreator] = useState("");
-    const [publisher, setPublisher] = useState("");
-    const [publication, setPublication] = useState("");
-    const [modified, setModified] = useState("");
-    const [language, setLanguage] = useState("");
-    const [identifier, setIdentifier] = useState("");
-    const [copyright, setCopyright] = useState("");
+    const [title, setTitle] = useState('');
+    const [creator, setCreator] = useState('');
+    const [publisher, setPublisher] = useState('');
+    const [publication, setPublication] = useState('');
+    const [modified, setModified] = useState('');
+    const [language, setLanguage] = useState('');
+    const [identifier, setIdentifier] = useState('');
+    const [copyright, setCopyright] = useState('');
     const modal = useRef();
 
     useEffect(() => {
@@ -40,16 +40,16 @@ export default function BookInfoModal() {
             );
         });
         modal.current.addEventListener("hidden.bs.modal", (e) => {
-            setPath("");
+            setPath('');
             setCover(MISSING_COVER_URL);
-            setTitle("");
-            setCreator("");
-            setPublisher("");
-            setPublication("");
-            setModified("");
-            setLanguage("");
-            setIdentifier("");
-            setCopyright("");
+            setTitle('');
+            setCreator('');
+            setPublisher('');
+            setPublication('');
+            setModified('');
+            setLanguage('');
+            setIdentifier('');
+            setCopyright('');
         });
     }, []);
 

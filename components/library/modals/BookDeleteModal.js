@@ -3,7 +3,7 @@ import { deleteBook } from "@/api/book";
 
 export default function BookDeleteModal({ update }) {
     const [id, setId] = useState(null);
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState('');
     const btn = useRef();
     const modal = useRef();
 
@@ -22,7 +22,7 @@ export default function BookDeleteModal({ update }) {
     }, []);
 
     function confirm() {
-        if (id === null) {
+        if (!id) {
             return;
         }
         deleteBook(id).then(

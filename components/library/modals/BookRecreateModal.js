@@ -3,8 +3,8 @@ import { recreateBookCache } from "@/api/book";
 
 export default function BookRecreateModal({ update }) {
     const [id, setId] = useState(null);
-    const [title, setTitle] = useState("");
-    const [url, setUrl] = useState("");
+    const [title, setTitle] = useState('');
+    const [url, setUrl] = useState('');
     const btn = useRef();
     const modal = useRef();
 
@@ -25,7 +25,7 @@ export default function BookRecreateModal({ update }) {
     }, []);
 
     function confirm() {
-        if (id === null) {
+        if (!id) {
             return;
         }
         recreateBookCache(url, id).then(

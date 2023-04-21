@@ -1,10 +1,11 @@
+import BookUpdateContext from "@/components/library/BookUpdateContext";
 import LibraryHeader from "@/components/library/header/LibraryHeader";
 import BookAddModal from "@/components/library/modals/add/BookAddModal";
 import BookInfoModal from "@/components/library/modals/BookInfoModal";
 import BookRecreateModal from "@/components/library/modals/BookRecreateModal";
 import BookDeleteModal from "@/components/library/modals/BookDeleteModal";
 import ThemeChangeModal from "@/components/library/modals/theme/ThemeChangeModal";
-import { cloneElement, useState } from "react";
+import { useState } from "react";
 
 export default function LibraryLayout({ children }) {
     const [update, setUpdate] = useState({});
@@ -22,7 +23,7 @@ export default function LibraryLayout({ children }) {
     }
 
     return (
-        <>
+        <BookUpdateContext.Provider value={[update, setUpdate]}>
             <BookAddModal update={onBookAdd}/>
             <BookInfoModal/>
             <BookRecreateModal update={onBookRecreate}/>
@@ -30,8 +31,8 @@ export default function LibraryLayout({ children }) {
             <ThemeChangeModal/>
             <div className="d-flex flex-column min-vh-100">
                 <LibraryHeader/>
-                {cloneElement(children, { onUpdate: update })}
+                {children}
             </div>
-        </>
+        </BookUpdateContext.Provider>
     )
 }

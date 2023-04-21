@@ -1,5 +1,3 @@
-import GithubProvider from "next-auth/providers/github"
-import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
 import prisma from "@/core/prisma";
 import NextAuth from "next-auth"
@@ -8,14 +6,6 @@ import bcrypt from "bcrypt";
 export const authOptions = {
     // Configure one or more authentication providers
     providers: [
-        //GithubProvider({
-        //    clientId: process.env.GITHUB_ID,
-        //    clientSecret: process.env.GITHUB_SECRET,
-        //}),
-        //GoogleProvider({
-        //    clientId: process.env.GOOGLE_ID,
-        //    clientSecret: process.env.GOOGLE_SECRET
-        //}),
         CredentialsProvider({
             // The name to display on the sign in form (e.g. "Sign in with...")
             name: 'Credentials',
@@ -42,6 +32,9 @@ export const authOptions = {
         }),
         // ...add more providers here
     ],
+    pages: {
+        signIn: '/auth/sign-in',
+    }
 };
 
 export default NextAuth(authOptions);

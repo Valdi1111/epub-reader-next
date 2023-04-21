@@ -3,7 +3,7 @@ import { deleteShelf } from "@/api/shelves";
 
 export default function ShelfDeleteModal({ update }) {
     const [id, setId] = useState(null);
-    const [name, setName] = useState("");
+    const [name, setName] = useState('');
     const btn = useRef();
     const modal = useRef();
 
@@ -17,12 +17,12 @@ export default function ShelfDeleteModal({ update }) {
         });
         modal.current.addEventListener("hidden.bs.modal", (e) => {
             setId(null);
-            setName("");
+            setName('');
         });
     }, []);
 
     function confirm() {
-        if (id === null) {
+        if (!id) {
             return;
         }
         deleteShelf(id).then(

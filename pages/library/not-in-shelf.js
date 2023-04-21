@@ -1,12 +1,14 @@
 import LibraryLayout from "@/components/library/LibraryLayout";
 import LibraryItem from "@/components/library/item/LibraryItem";
 import LibraryItemAdder from "@/components/library/item/LibraryItemAdder";
+import BookUpdateContext from "@/components/library/BookUpdateContext";
 import { BOOKS_PER_PAGE, getBooksNotInShelf } from "@/api/library";
+import { useContext, useEffect, useState } from "react";
 import { getNotInShelf } from "@/core/library";
-import { useEffect, useState } from "react";
 import Head from "next/head";
 
 export default function LibraryNotInShelf(props) {
+    const [update, setUpdate] = useContext(BookUpdateContext);
     const [hasMore, setHasMore] = useState(false);
     const [books, setBooks] = useState([]);
     const [page, setPage] = useState(1);
@@ -17,23 +19,24 @@ export default function LibraryNotInShelf(props) {
         setPage(1);
     }, [props.books]);
 
+    // Handle book add/recreate/delete
     useEffect(() => {
-        if (props.onUpdate.add) {
-            if (props.onUpdate.add.shelf === null) {
+        if (update.add) {
+            if (update.add.shelf === null) {
                 refreshBooks();
             }
         }
-        if (props.onUpdate.recreate) {
-            if (props.onUpdate.recreate.shelf === null) {
+        if (update.recreate) {
+            if (update.recreate.shelf === null) {
                 refreshBooks();
             }
         }
-        if (props.onUpdate.delete) {
-            if (books.filter(b => b.id === parseInt(props.onUpdate.delete.id)).length === 1) {
+        if (update.delete) {
+            if (books.filter(b => b.id === parseInt(update.delete.id)).length === 1) {
                 refreshBooks();
             }
         }
-    }, [props.onUpdate]);
+    }, [update]);
 
     function refreshBooks() {
         getBooksNotInShelf(BOOKS_PER_PAGE * page + 1, 0).then(
