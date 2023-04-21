@@ -26,10 +26,10 @@ export default function LibraryShelves(props) {
     );
 }
 
-LibraryShelves.getLayout = function getLayout(settings, setSetting, Component, pageProps) {
+LibraryShelves.getLayout = function getLayout(Component, pageProps) {
     return (
-        <LibraryShelvesLayout settings={settings} setSetting={setSetting}>
-            <Component {...pageProps} settings={settings} setSetting={setSetting}/>
+        <LibraryShelvesLayout>
+            <Component {...pageProps}/>
         </LibraryShelvesLayout>
     );
 }

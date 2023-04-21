@@ -1,75 +1,54 @@
-$list-group-active-bg: #e7f1ff;
+$body-color: #dedede;
+$body-bg: #292929;
+
+$border-color: lighten($body-bg, 10%);
+
+$link-color: $body-color;
+$link-decoration: none;
+
+/* Btn close */
+$btn-close-color: $body-color;
+
+/* Dropdowns */
+$dropdown-color: $body-color;
+$dropdown-bg: $body-bg;
+
+$dropdown-link-color: $body-color;
+$dropdown-border-color: $border-color;
+
+$dropdown-link-hover-color: darken($body-color, 3%);
+$dropdown-link-hover-bg: darken($body-bg, 3%);
+
+$dropdown-link-active-color: darken($body-color, 5%);
+$dropdown-link-active-bg: darken($body-bg, 5%);
+
+/* List groups */
+$list-group-color: $body-color;
+$list-group-bg: $body-bg;
+$list-group-border-color: $border-color;
+
+$list-group-active-color: darken($body-color, 5%);
+$list-group-active-bg: darken($body-bg, 5%);
+
+/* Accordion */
+$accordion-button-active-bg: darken($body-bg, 5%);
+$accordion-button-active-color: darken($body-color, 5%);
+
+/* Modals */
+$modal-content-color: $body-color;
+$modal-content-bg: $body-bg;
+
+/* Inputs */
+$input-bg: darken($body-bg, 3%);
+$input-disabled-bg: $input-bg;
+$input-border-color: $border-color;
+$input-focus-border-color: $input-border-color;
+
+$form-check-input-border: 1px solid $border-color;
+
+$form-range-track-bg: $input-bg;
+
 @import "bootstrap/scss/bootstrap";
 
-.min-width-0 {
-  min-width: 0;
-}
-
-.overflow-y-scroll {
-  overflow-y: scroll !important;
-}
-
-.cursor-default {
-  cursor: default !important;
-}
-
-.cursor-pointer {
-  cursor: pointer !important;
-}
-
-.cursor-wait {
-  cursor: wait !important;
-}
-
-.cursor-text {
-  cursor: text !important;
-}
-
-.scroll-pane {
-  position: relative !important;
-}
-
-.scroll-pane-inner {
-  overflow-y: scroll !important;
-  position: absolute !important;
-  max-height: 100% !important;
-  width: 100% !important;
-}
-
-::-webkit-scrollbar-track {
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  background-color: $border-color;
-}
-
-::-webkit-scrollbar-corner {
-  background-color: $body-bg;
-}
-
-.btn-icon, .btn-social {
-  display: inline-flex;
-  align-content: center !important;
-  justify-content: center !important;
-  padding: 0.6rem 0.75rem !important;
-}
-
-.btn-social:hover {
-  opacity: 0.7;
-}
-
-.btn-social > svg {
-  width: 32px;
-  height: 32px;
-}
-
-a {
-  text-decoration: none !important;
-}
+@import "components";
+@import "image-view-modal";

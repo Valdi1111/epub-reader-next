@@ -9,6 +9,7 @@ export const FORCE_FONT_SIZE = 'force-font-size';
 export const JUSTIFY = 'justify';
 export const LAYOUT = 'layout';
 export const THEME = 'theme';
+export const UPDATE_LAST_READ = 'update-last-read';
 
 export const FONTS = {
     serif: 'Serif',

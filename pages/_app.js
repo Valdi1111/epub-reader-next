@@ -1,6 +1,8 @@
 import '@/styles/custom.scss'
+import LoadingComponent from "@/components/LoadingComponent";
+import SettingsContext from "@/components/SettingsContext";
+import { SessionProvider } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Head from "next/head";
 import {
     FONT,
     FONT_SIZE, FONTS,
@@ -9,18 +11,18 @@ import {
     LAYOUT, LAYOUTS,
     MARGINS,
     SPACING,
-    THEME, THEMES,
+    THEME, THEMES, UPDATE_LAST_READ,
     WIDTH
 } from "@/components/Settings";
-import LoadingComponent from "@/components/LoadingComponent";
+import Head from "next/head";
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps: { session, ...pageProps } }) {
     const [settings, setSettings] = useState({});
     const [readySettings, setReadySettings] = useState(false);
 
     // Load settings
     useEffect(() => {
-        require('bootstrap/dist/js/bootstrap.bundle.min.js');
+        import("bootstrap/dist/js/bootstrap.bundle.min");
         const s = {};
         getSettingOrSave(s, FONT, Object.keys(FONTS)[0]);
         getSettingOrSave(s, FONT_SIZE, 19);
@@ -32,6 +34,7 @@ export default function App({ Component, pageProps }) {
         getSettingOrSave(s, THEME, Object.keys(THEMES)[0]);
         getSettingOrSave(s, LAYOUT, Object.keys(LAYOUTS)[0]);
         getSettingOrSave(s, JUSTIFY, true);
+        getSettingOrSave(s, UPDATE_LAST_READ, true);
         setSettings(s);
         setReadySettings(true);
     }, []);
@@ -83,7 +86,11 @@ export default function App({ Component, pageProps }) {
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
             </Head>
-            {Component.getLayout(settings, setSetting, Component, pageProps)}
+            <SessionProvider session={session}>
+                <SettingsContext.Provider value={[settings, setSetting]}>
+                    {Component.getLayout(Component, pageProps)}
+                </SettingsContext.Provider>
+            </SessionProvider>
         </>
     );
 }

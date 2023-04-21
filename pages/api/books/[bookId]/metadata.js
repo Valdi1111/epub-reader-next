@@ -1,7 +1,11 @@
-import { checkIntParam, handleError } from "@/core/utils";
+import { checkIntParam, checkToken, handleError } from "@/core/utils";
 import { getMetadata } from "@/core/book";
 
 export default async function handler(req, res) {
+    const user = await checkToken(req, res);
+    if (!user) {
+        return;
+    }
     if (req.method !== 'GET') {
         return res.status(405).json({ error: true, message: 'Wrong method!' });
     }

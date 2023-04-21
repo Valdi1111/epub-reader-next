@@ -1,11 +1,13 @@
 import ModalTheme from "@/components/library/modals/theme/ModalTheme";
-import { useEffect, useRef, useState } from "react";
+import SettingsContext from "@/components/SettingsContext";
+import { useContext, useEffect, useRef, useState } from "react";
 import { THEME, THEMES } from "../../../Settings";
 
 export const PREFIX = 'theme-modal';
 export const CHECKBOX_NAME = PREFIX + '-select-theme';
 
-export default function ThemeChangeModal({ settings, setSetting }) {
+export default function ThemeChangeModal() {
+    const [settings, setSetting] = useContext(SettingsContext);
     const modal = useRef();
     const [themes, setThemes] = useState({});
 

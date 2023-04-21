@@ -1,8 +1,12 @@
-import { checkBodyParams, checkIntParam, handleError, handleUpdateError } from "@/core/utils";
+import { checkBodyParams, checkIntParam, checkToken, handleError, handleUpdateError } from "@/core/utils";
 import { recreate, deleteById, getById } from "@/core/book";
 import { removeFile } from "@/core/cover";
 
 export default async function handler(req, res) {
+    const user = await checkToken(req, res);
+    if (!user) {
+        return;
+    }
     const id = checkIntParam(res, req.query.bookId, 'Invalid book id!', { gt: 0 });
     if (!id) {
         return;

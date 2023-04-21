@@ -10,7 +10,7 @@ import SettingsLayouts from "@/components/books/settings/SettingsLayouts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 
-export default function BookSettings({ settings, setSetting }) {
+export default function BookSettings() {
     return (
         <div className="dropdown">
             <button className="btn btn-icon btn-outline-secondary" type="button" id="settings-dropdown"
@@ -18,15 +18,15 @@ export default function BookSettings({ settings, setSetting }) {
                 <FontAwesomeIcon icon={faGear} width={16} height={16}/>
             </button>
             <div className="dropdown-menu" aria-labelledby="settings-dropdown" style={{ width: "300px" }}>
-                <SettingsFont settings={settings} setSetting={setSetting}/>
-                <SettingsFontSize settings={settings} setSetting={setSetting}/>
-                <SettingsSpacing settings={settings} setSetting={setSetting}/>
-                <SettingsMargins settings={settings} setSetting={setSetting}/>
-                <SettingsWidth settings={settings} setSetting={setSetting}/>
-                <SettingsForceFont settings={settings} setSetting={setSetting}/>
-                <SettingsForceFontSize settings={settings} setSetting={setSetting}/>
-                <SettingsFullJustification settings={settings} setSetting={setSetting}/>
-                <SettingsLayouts settings={settings} setSetting={setSetting}/>
+                <SettingsFont/>
+                <SettingsFontSize/>
+                <SettingsSpacing/>
+                <SettingsMargins/>
+                <SettingsWidth/>
+                <SettingsForceFont/>
+                <SettingsForceFontSize/>
+                <SettingsFullJustification/>
+                <SettingsLayouts/>
             </div>
         </div>
     );

@@ -2,7 +2,7 @@ import LibraryLayout from "@/components/library/LibraryLayout";
 import ShelfAddModal from "@/components/library/shelves/modals/ShelfAddModal";
 import { useRouter } from "next/navigation";
 
-export default function LibraryShelvesLayout({ settings, setSetting, children }) {
+export default function LibraryShelvesLayout({ children }) {
     const router = useRouter();
 
     function onShelfAdd(data) {
@@ -12,7 +12,7 @@ export default function LibraryShelvesLayout({ settings, setSetting, children })
     return (
         <>
             <ShelfAddModal update={onShelfAdd}/>
-            <LibraryLayout settings={settings} setSetting={setSetting}>
+            <LibraryLayout>
                 {children}
             </LibraryLayout>
         </>

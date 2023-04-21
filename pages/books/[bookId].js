@@ -1,89 +1,145 @@
 import ImageViewModal from "@/components/books/modals/ImageViewModal";
 import BookHeader from "@/components/books/BookHeader";
-import BookBody from "@/components/books/BookBody";
 import BookFooter from "@/components/books/BookFooter";
+import BookBody from "@/components/books/BookBody";
+import SettingsContext from "@/components/SettingsContext";
 import { EPUB_URL, updatePosition } from "@/api/book";
 import { getById } from "@/core/book";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Book, EpubCFI } from "epubjs";
 import {
     FONT, FONT_SIZE, SPACING, MARGINS, WIDTH, FORCE_FONT, FORCE_FONT_SIZE,
-    JUSTIFY, LAYOUT, THEME, FONTS, LAYOUTS, THEMES, isWheelAllowed
+    JUSTIFY, LAYOUT, THEME, FONTS, LAYOUTS, THEMES, isWheelAllowed, UPDATE_LAST_READ
 } from "@/components/Settings";
 import Head from "next/head";
 
 export default function BookId(props) {
-    const { settings, setSetting } = props;
+    const [settings, setSetting] = useContext(SettingsContext);
     const { id, url } = props.book;
     const { title } = props.book.book_metadata;
     const { navigation, locations } = props.book.book_cache;
     // book
-    const [book, setBook] = useState(null);
-    const [ready, setReady] = useState(false);
-    // data
+    const book = useRef(null);
+    const ready = useRef(false);
+    // State for loading screen
+    const [loaded, setLoaded] = useState(false);
+    // Book data
     const [mark, setMark] = useState({ position: null, page: 0 }); // current position and page
     const [chapter, setChapter] = useState(null); // current chapter
     const [section, setSection] = useState(null); // current section (from spine)
     const [location, setLocation] = useState(null);
     const [percentage, setPercentage] = useState(null);
 
+    /**
+     * Handle layout updates
+     */
     useEffect(() => {
-        setReady(false);
-        console.log("Loading book", id);
-        const epub = new Book(EPUB_URL + url);
-        setMark(props.book.book_progress);
-        setBook(epub);
-    }, [id]);
-
-    useEffect(() => {
-        if (!book) {
+        if (!ready.current) {
             return;
         }
-        // Generate locations
-        book.ready.then(() => {
-            console.log("Loading locations...");
-            book.locations.load(locations);
-            console.log("Locations loaded!");
-            setReady(true);
-        });
-        document.onkeydown = onKeyDown;
+        ready.current = false;
         updateLayout();
-    }, [book]);
+    }, [settings[LAYOUT], settings[MARGINS]]);
 
+    /**
+     * Handle font settings updates
+     */
     useEffect(() => {
-        if (!mark.position) {
+        if (!ready.current) {
+            return;
+        }
+        updateDefaultTheme();
+    }, [
+        settings[FONT],
+        settings[FONT_SIZE],
+        settings[SPACING],
+        settings[JUSTIFY],
+        settings[FORCE_FONT],
+        settings[FORCE_FONT_SIZE]
+    ]);
+
+    /**
+     * Handle dimension updates
+     */
+    useEffect(() => {
+        if (!ready.current) {
+            return;
+        }
+        const width = parseInt(settings[WIDTH]) + parseInt(settings[MARGINS]);
+        book.current.rendition.resize(width, '100%');
+    }, [settings[WIDTH]]);
+
+    /**
+     * Handle theme updates
+     */
+    useEffect(() => {
+        if (!ready.current) {
+            return;
+        }
+        updateTheme();
+    }, [settings[THEME]]);
+
+    /**
+     * Load book
+     */
+    useEffect(() => {
+        if (book.current) {
+            return;
+        }
+        console.log("Loading book", id);
+        book.current = new Book(EPUB_URL + url);
+        setMark(props.book.book_progress);
+        // Generate locations
+        book.current.ready.then(() => {
+            console.log("Loading locations...");
+            book.current.locations.load(locations);
+            console.log("Locations loaded!");
+            document.onkeydown = onKeyDown;
+            updateLayout();
+            setLoaded(true);
+        });
+    }, [id]);
+
+    /**
+     * Update position
+     */
+    useEffect(() => {
+        if (!ready.current) {
             return;
         }
         // TODO setting for auto update last read
-        updatePosition(id, mark.position, mark.page, true).then(
+        const update = settings[UPDATE_LAST_READ] === 'true';
+        updatePosition(id, mark.position, mark.page, update).then(
             res => console.debug("Position updated!"),
             err => console.error(err)
         );
     }, [mark]);
 
+    /**
+     * Render book
+     */
     function updateLayout() {
         const area = document.getElementById('book-view');
         area.innerHTML = '';
-        const layout = settings[LAYOUT];
-        const gap = parseFloat(settings[MARGINS]);
-        const width = parseFloat(settings[WIDTH]) + gap;
-        let rendition = book.renderTo(area, {
-            ...LAYOUTS[layout].settings,
-            width: width + 'px',
+        const gap = parseInt(settings[MARGINS]);
+        const width = parseInt(settings[WIDTH]) + gap;
+        let rendition = book.current.renderTo(area, {
+            ...LAYOUTS[settings[LAYOUT]].settings,
+            width: width,
             height: '100%',
             gap: gap
         });
         if (!mark.position) {
-            rendition.display();
+            rendition.display().then(r => ready.current = true);
         } else {
-            rendition.display(mark.position);
+            rendition.display(mark.position).then(r => ready.current = true);
         }
         rendition.on('relocated', updatePage);
         rendition.on('keydown', onKeyDown);
         // Open image view modal when clicking on img or image tag
-        rendition.on('click', e => {
+        rendition.on('click', async e => {
             if (e.target.tagName.toLowerCase() === 'img' || e.target.tagName.toLowerCase() === 'image') {
-                const { Modal } = require("bootstrap");
+                const { default: Modal } = await import("bootstrap/js/dist/modal");
                 new Modal(document.getElementById('image-view-modal')).show(e.target);
             }
         });
@@ -94,10 +150,10 @@ export default function BookId(props) {
             }
             contents.documentElement.onwheel = e => {
                 if (e.deltaY < 0) {
-                    onLeft();
+                    prev();
                 }
                 if (e.deltaY > 0) {
-                    onRight();
+                    next();
                 }
             }
         });
@@ -115,10 +171,10 @@ export default function BookId(props) {
                     const hr = (end.screenX - start.screenX) / bound.width;
                     const vr = Math.abs((end.screenY - start.screenY) / bound.height);
                     if (hr > 0.1 && vr < 0.1) {
-                        onLeft();
+                        prev();
                     }
                     if (hr < -0.1 && vr < 0.1) {
-                        onRight();
+                        next();
                     }
                 }
             }
@@ -147,6 +203,40 @@ export default function BookId(props) {
         updateTheme();
     }
 
+    /**
+     * Update default book theme settings
+     */
+    function updateDefaultTheme() {
+        const theme = {};
+        theme['font-family'] = FONTS[settings[FONT]] + (settings[FORCE_FONT] === 'true' ? ' !important' : '');
+        theme['font-size'] = settings[FONT_SIZE] + (settings[FORCE_FONT_SIZE] === 'true' ? 'px !important' : 'px');
+        theme['line-height'] = settings[SPACING];
+        theme['text-align'] = settings[JUSTIFY] === 'true' ? 'justify' : 'left';
+        book.current.rendition.themes.default({ body: theme });
+    }
+
+    /**
+     * Update book theme
+     */
+    function updateTheme() {
+        book.current.rendition.themes.select(settings[THEME]);
+    }
+
+    function updatePage(loc) {
+        const { cfi, href, displayed } = loc.start;
+        // update current chapter
+        setChapter(getChapFromCfi(loc.end.cfi));
+        // update section
+        setSection({ current: book.current.spine.get(cfi).index, total: book.current.spine.last().index });
+        // update location
+        const page = book.current.locations.locationFromCfi(cfi);
+        setLocation({ current: page, total: book.current.locations.length() });
+        // update percentage
+        setPercentage(book.current.locations.percentageFromCfi(cfi));
+        // update cache position
+        setMark({ position: cfi, page: page });
+    }
+
     function flattenNav(items) {
         return [].concat.apply([], items.map(item => [].concat.apply([item], flattenNav(item.subitems))));
     }
@@ -164,59 +254,8 @@ export default function BookId(props) {
         return prev;
     }
 
-    function updatePage(loc) {
-        const { cfi, href, displayed } = loc.start;
-        // update current chapter
-        setChapter(getChapFromCfi(loc.end.cfi));
-        // update section
-        setSection({ current: book.spine.get(cfi).index, total: book.spine.last().index });
-        // update location
-        const page = book.locations.locationFromCfi(cfi);
-        setLocation({ current: page, total: book.locations.length() });
-        // update percentage
-        setPercentage(book.locations.percentageFromCfi(cfi));
-        // update cache position
-        setMark({ position: cfi, page: page });
-    }
-
-    function updateDefaultTheme() {
-        const theme = {};
-        theme['font-family'] = FONTS[settings[FONT]] + (settings[FORCE_FONT] === 'true' ? ' !important' : '');
-        theme['font-size'] = settings[FONT_SIZE] + (settings[FORCE_FONT_SIZE] === 'true' ? 'px !important' : 'px');
-        theme['line-height'] = settings[SPACING];
-        theme['text-align'] = settings[JUSTIFY] === 'true' ? 'justify' : 'left';
-        book.rendition.themes.default({ body: theme });
-    }
-
-    function updateTheme() {
-        book.rendition.themes.select(settings[THEME]);
-    }
-
-    function changeSetting(key, value) {
-        setSetting(key, value);
-        if (key === FONT || key === FONT_SIZE || key === SPACING || key === JUSTIFY
-            || key === FORCE_FONT || key === FORCE_FONT_SIZE) {
-            updateDefaultTheme();
-        }
-        if (key === WIDTH) {
-            const width = parseFloat(settings[WIDTH]) + parseFloat(settings[MARGINS]);
-            book.rendition.resize(width + 'px', '100%');
-        }
-        if (key === LAYOUT || key === MARGINS) {
-            updateLayout()
-        }
-        if (key === THEME) {
-            updateTheme();
-        }
-    }
-
-    function navigateTo(href) {
-        book.rendition.display(href);
-        console.debug("Navigate", href);
-    }
-
     function searchSpine(item, value) {
-        return item.load(book.load.bind(book))
+        return item.load(book.current.load.bind(book.current))
             .then(item.find.bind(item, value))
             .finally(item.unload.bind(item))
             .then(elems => elems.map(e => {
@@ -227,33 +266,48 @@ export default function BookId(props) {
 
     function search(value, all) {
         if (all) {
-            return Promise.all(book.spine.spineItems.map(item => searchSpine(item, value)))
+            return Promise.all(book.current.spine.spineItems.map(item => searchSpine(item, value)))
                 .then(results => Promise.resolve([].concat.apply([], results)));
         }
-        const item = book.spine.get(book.rendition.location.start.cfi);
+        const item = book.current.spine.get(book.current.rendition.location.start.cfi);
         return searchSpine(item, value);
     }
 
+    /**
+     * Navigate to location
+     * @param href book location
+     */
+    function navigateTo(href) {
+        book.current.rendition.display(href);
+        console.debug("Navigate", href);
+    }
+
+    /**
+     * Handle arrow right/left to navigate book pages
+     * @param e event
+     */
     function onKeyDown(e) {
         let code = e.keyCode || e.which;
         if (code === 37) {
-            onLeft();
+            prev();
         }
         if (code === 39) {
-            onRight();
+            next();
         }
     }
 
-    function onLeft() {
-        book.rendition.prev();
+    function prev() {
+        if (!ready.current) {
+            return;
+        }
+        book.current.rendition.prev();
     }
 
-    function onRight() {
-        book.rendition.next();
-    }
-
-    if (!book) {
-        return <></>;
+    function next() {
+        if (!ready.current) {
+            return;
+        }
+        book.current.rendition.next();
     }
 
     return (
@@ -263,18 +317,18 @@ export default function BookId(props) {
             </Head>
             <ImageViewModal/>
             <div className="vw-100 vh-100 d-flex flex-column">
-                <BookHeader settings={settings} setSetting={changeSetting} title={title} chapter={chapter}
-                            navigation={navigation} navigateTo={navigateTo} search={search}/>
-                <BookBody ready={ready}/>
+                <BookHeader title={title} chapter={chapter} navigation={navigation} navigateTo={navigateTo}
+                            search={search}/>
+                <BookBody loaded={loaded}/>
                 <BookFooter chapter={chapter} section={section} location={location} percentage={percentage}
-                            left={onLeft} right={onRight}/>
+                            prev={prev} next={next}/>
             </div>
         </>
     );
 }
 
-BookId.getLayout = function getLayout(settings, setSetting, Component, pageProps) {
-    return <Component {...pageProps} settings={settings} setSetting={setSetting}/>;
+BookId.getLayout = function getLayout(Component, pageProps) {
+    return <Component {...pageProps}/>;
 }
 
 export async function getServerSideProps(context) {

@@ -1,9 +1,9 @@
 import BookContents from "@/components/books/contents/BookContents";
 import BookSettings from "@/components/books/settings/BookSettings";
 
-export default function BookHeader({ settings, setSetting, title, chapter, navigation, navigateTo, search }) {
+export default function BookHeader({ title, chapter, navigation, navigateTo, search }) {
     function titleLabel() {
-        return title === null ? "" : title;
+        return title === null ? '' : title;
     }
 
     return (
@@ -12,7 +12,7 @@ export default function BookHeader({ settings, setSetting, title, chapter, navig
             <p id="book-title" className="flex-grow-1 mb-0 text-center text-truncate px-2" title={titleLabel()}>
                 {titleLabel()}
             </p>
-            <BookSettings settings={settings} setSetting={setSetting}/>
+            <BookSettings/>
         </header>
     );
 }

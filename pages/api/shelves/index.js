@@ -1,7 +1,11 @@
 import { addShelf, getShelves } from "@/core/shelves";
-import { checkBodyParams, handleError } from "@/core/utils";
+import { checkBodyParams, checkToken, handleError } from "@/core/utils";
 
 export default async function handler(req, res) {
+    const user = await checkToken(req, res);
+    if (!user) {
+        return;
+    }
     if (req.method === 'GET') {
         // Get shelves
         try {

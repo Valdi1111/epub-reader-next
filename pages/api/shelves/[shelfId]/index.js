@@ -1,7 +1,11 @@
 import { deleteShelf, editShelf } from "@/core/shelves";
-import { checkIntParam, handleUpdateError } from "@/core/utils";
+import { checkIntParam, checkToken, handleUpdateError } from "@/core/utils";
 
 export default async function handler(req, res) {
+    const user = await checkToken(req, res);
+    if (!user) {
+        return;
+    }
     const id = checkIntParam(res, req.query.shelfId, 'Invalid shelf id!', { gt: 0 });
     if (!id) {
         return;

@@ -1,6 +1,10 @@
+import SettingsContext from "@/components/SettingsContext";
 import { FONT, FONTS } from "../../Settings";
+import { useContext } from "react";
 
-export default function SettingsFont({ settings, setSetting }) {
+export default function SettingsFont() {
+    const [settings, setSetting] = useContext(SettingsContext);
+
     function font(e) {
         setSetting(FONT, e.target.value);
     }

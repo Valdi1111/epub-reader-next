@@ -5,13 +5,12 @@ import { markRead, markUnread } from "@/api/book";
  * @param {int} id
  * @param {int} page
  * @param {function} setRead
- * @param {function} setUnread
  * @returns {JSX.Element}
  * @constructor
  */
-export default function ItemReadToggle({ id, page, setRead, setUnread }) {
-    const unread = () => markUnread(id).then(res => setUnread());
-    const read = () => markRead(id).then(res => setRead());
+export default function ItemReadToggle({ id, page, setRead }) {
+    const unread = () => markUnread(id).then(res => setRead(false));
+    const read = () => markRead(id).then(res => setRead(true));
     if (page === -1) {
         return (
             <li className="cursor-pointer">

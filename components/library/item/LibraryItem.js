@@ -16,31 +16,29 @@ export default function LibraryItem(props) {
     const { total } = props.book.book_progress;
     const [page, setPage] = useState(props.book.book_progress.page);
 
-    function setUnread() {
-        setPage(0);
-    }
-
-    function setRead() {
-        setPage(-1);
+    function setRead(val) {
+        setPage(val ? -1 : 0);
     }
 
     return (
-        <div className="d-flex flex-column" style={{ width: "150px" }}>
-            <ItemCover id={id} cover={cover} title={title} creator={creator}/>
-            <div className="d-flex flex-row justify-content-between align-items-center mt-1">
-                <ItemProgress page={page} total={total}/>
-                <div className="dropdown">
-                    <button type="button" id="book-other" className="btn btn-outline-secondary px-2 py-0"
-                            data-bs-toggle="dropdown" aria-expanded={false}>
-                        <FontAwesomeIcon icon={faEllipsis} width={16} height={16}/>
-                    </button>
-                    <ul className="dropdown-menu dropdown-menu-end min-width-0" aria-labelledby="book-other">
-                        <ItemGoToShelf shelf_id={shelf_id}/>
-                        <ItemAbout id={id} url={url} cover={cover}/>
-                        <ItemReadToggle id={id} page={page} setRead={setRead} setUnread={setUnread}/>
-                        <ItemInvalidate id={id} url={url} title={title}/>
-                        <ItemRemove id={id} title={title}/>
-                    </ul>
+        <div className="col-auto p-2">
+            <div className="d-flex flex-column" style={{ width: "150px" }}>
+                <ItemCover id={id} cover={cover} title={title} creator={creator}/>
+                <div className="d-flex flex-row justify-content-between align-items-center mt-1">
+                    <ItemProgress page={page} total={total}/>
+                    <div className="dropdown">
+                        <button type="button" id="book-other" className="btn btn-outline-secondary px-2 py-0"
+                                data-bs-toggle="dropdown" aria-expanded={false}>
+                            <FontAwesomeIcon icon={faEllipsis} width={16} height={16}/>
+                        </button>
+                        <ul className="dropdown-menu dropdown-menu-end min-width-0" aria-labelledby="book-other">
+                            <ItemGoToShelf shelf_id={shelf_id}/>
+                            <ItemAbout id={id} url={url} cover={cover}/>
+                            <ItemReadToggle id={id} page={page} setRead={setRead}/>
+                            <ItemInvalidate id={id} url={url} title={title}/>
+                            <ItemRemove id={id} title={title}/>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

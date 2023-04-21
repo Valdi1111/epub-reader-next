@@ -1,6 +1,7 @@
 import getConfig from "next/config";
 import path from "path";
 import fs from "fs";
+import { checkToken } from "@/core/utils";
 
 export const config = {
     api: {
@@ -9,6 +10,10 @@ export const config = {
 }
 
 export default async function handler(req, res) {
+    const user = await checkToken(req, res);
+    if (!user) {
+        return;
+    }
     const { epubId } = req.query;
     const { serverRuntimeConfig } = getConfig();
     const p = path.join(serverRuntimeConfig.EPUB_FOLDER, ...epubId);

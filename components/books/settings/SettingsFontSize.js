@@ -1,6 +1,10 @@
+import SettingsContext from "@/components/SettingsContext";
 import { FONT_SIZE, FONT_SIZES } from "../../Settings";
+import { useContext } from "react";
 
-export default function SettingsFontSize({ settings, setSetting }) {
+export default function SettingsFontSize() {
+    const [settings, setSetting] = useContext(SettingsContext);
+
     function fontSize(e) {
         setSetting(FONT_SIZE, e.target.value);
     }

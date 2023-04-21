@@ -1,6 +1,10 @@
+import SettingsContext from "@/components/SettingsContext";
 import { JUSTIFY } from "../../Settings";
+import { useContext } from "react";
 
-export default function SettingsFullJustification({ settings, setSetting }) {
+export default function SettingsFullJustification() {
+    const [settings, setSetting] = useContext(SettingsContext);
+
     function justify(e) {
         setSetting(JUSTIFY, e.target.checked ? "true" : "false");
     }

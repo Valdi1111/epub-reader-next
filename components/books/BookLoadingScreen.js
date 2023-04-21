@@ -1,7 +1,7 @@
 import LoadingComponent from "@/components/LoadingComponent";
 
-export default function BookLoadingScreen({ ready }) {
-    if (ready) {
+export default function BookLoadingScreen({ loaded }) {
+    if (loaded) {
         return <></>;
     }
 

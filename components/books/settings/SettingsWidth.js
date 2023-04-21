@@ -1,8 +1,12 @@
+import SettingsContext from "@/components/SettingsContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { WIDTH } from "../../Settings";
+import { useContext } from "react";
 
-export default function SettingsWidth({ settings, setSetting }) {
+export default function SettingsWidth() {
+    const [settings, setSetting] = useContext(SettingsContext);
+
     function width(e, up) {
         const input = document.getElementById('input-width');
         if (up) {

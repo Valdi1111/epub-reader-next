@@ -1,6 +1,10 @@
+import SettingsContext from "@/components/SettingsContext";
 import { LAYOUT } from "../../Settings";
+import { useContext } from "react";
 
-export default function SettingsLayout({ settings, setSetting, id, name }) {
+export default function SettingsLayout({ id, name }) {
+    const [settings, setSetting] = useContext(SettingsContext);
+
     function layout(e) {
         setSetting(LAYOUT, e.target.value);
     }

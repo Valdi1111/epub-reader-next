@@ -14,11 +14,7 @@ export default function ShelvesContentSection({ uid, shelf, books }) {
             </h2>
             <div id={body} className="accordion-collapse collapse show" aria-labelledby={header}>
                 <div className="accordion-body row mx-0 p-0">
-                    {books.map(b =>
-                        <div className="col-auto p-2" key={b.id}>
-                            <LibraryItem book={b}/>
-                        </div>
-                    )}
+                    {books.map(b => <LibraryItem key={b.id} book={b}/>)}
                 </div>
             </div>
         </div>

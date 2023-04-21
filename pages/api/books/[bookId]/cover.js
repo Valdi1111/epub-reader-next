@@ -1,5 +1,5 @@
 import { updateCover, nullCover, removeFile, saveFile } from "@/core/cover";
-import { checkIntParam, handleUpdateError } from "@/core/utils";
+import { checkIntParam, checkToken, handleUpdateError } from "@/core/utils";
 
 export const config = {
     api: {
@@ -10,6 +10,10 @@ export const config = {
 export default async function handler(req, res) {
     const id = checkIntParam(res, req.query.bookId, 'Invalid book id!', { gt: 0 });
     if (!id) {
+        return;
+    }
+    const user = await checkToken(req, res);
+    if (!user) {
         return;
     }
     if (req.method === 'POST') {

@@ -31,7 +31,7 @@ export async function markRead(id) {
     );
 }
 
-export async function updatePosition(id, position, page, update = false) {
+export async function updatePosition(id, position, page, update = true) {
     return axios.put(
         `/api/books/${id}/position`,
         { position, page, update },

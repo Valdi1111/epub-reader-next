@@ -1,8 +1,12 @@
+import SettingsContext from "@/components/SettingsContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { MARGINS } from "../../Settings";
+import { useContext } from "react";
 
-export default function SettingsMargins({ settings, setSetting }) {
+export default function SettingsMargins() {
+    const [settings, setSetting] = useContext(SettingsContext);
+
     function margins(e, up) {
         const input = document.getElementById('input-margins');
         if (up) {

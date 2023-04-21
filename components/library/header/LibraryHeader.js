@@ -1,12 +1,13 @@
 import HeaderNavItem from "@/components/library/header/HeaderNavItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 
 export default function LibraryHeader() {
 
     function logout() {
-
+        signOut().then(r => console.log("Logged out..."));
     }
 
     return (

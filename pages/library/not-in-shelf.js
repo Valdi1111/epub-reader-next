@@ -29,7 +29,7 @@ export default function LibraryNotInShelf(props) {
             }
         }
         if (props.onUpdate.delete) {
-            if(books.filter(b => b.id === parseInt(props.onUpdate.delete.id)).length === 1) {
+            if (books.filter(b => b.id === parseInt(props.onUpdate.delete.id)).length === 1) {
                 refreshBooks();
             }
         }
@@ -63,11 +63,7 @@ export default function LibraryNotInShelf(props) {
             </Head>
             <div className="scroll-pane flex-grow-1">
                 <div className="scroll-pane-inner row mx-0">
-                    {books.map(book =>
-                        <div className="col-auto p-2" key={book.id}>
-                            <LibraryItem book={book}/>
-                        </div>
-                    )}
+                    {books.map(book => <LibraryItem key={book.id} book={book}/>)}
                     <div className="col-auto p-2">
                         <LibraryItemAdder hasMore={hasMore} loadMore={loadMore}/>
                     </div>
@@ -77,10 +73,10 @@ export default function LibraryNotInShelf(props) {
     );
 }
 
-LibraryNotInShelf.getLayout = function getLayout(settings, setSetting, Component, pageProps) {
+LibraryNotInShelf.getLayout = function getLayout(Component, pageProps) {
     return (
-        <LibraryLayout settings={settings} setSetting={setSetting}>
-            <Component {...pageProps} settings={settings} setSetting={setSetting}/>
+        <LibraryLayout>
+            <Component {...pageProps}/>
         </LibraryLayout>
     );
 }

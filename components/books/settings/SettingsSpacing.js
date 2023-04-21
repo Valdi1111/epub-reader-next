@@ -1,8 +1,12 @@
+import SettingsContext from "@/components/SettingsContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { SPACING } from "../../Settings";
+import { useContext } from "react";
 
-export default function SettingsSpacing({ settings, setSetting }) {
+export default function SettingsSpacing() {
+    const [settings, setSetting] = useContext(SettingsContext);
+
     function spacing(e, up) {
         const input = document.getElementById('input-spacing');
         if (up) {

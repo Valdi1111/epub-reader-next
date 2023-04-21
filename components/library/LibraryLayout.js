@@ -6,12 +6,8 @@ import BookDeleteModal from "@/components/library/modals/BookDeleteModal";
 import ThemeChangeModal from "@/components/library/modals/theme/ThemeChangeModal";
 import { cloneElement, useState } from "react";
 
-export default function LibraryLayout({ settings, setSetting, children }) {
+export default function LibraryLayout({ children }) {
     const [update, setUpdate] = useState({});
-
-    function logout() {
-
-    }
 
     function onBookAdd(data) {
         setUpdate({ add: { id: data.id, shelf: data.shelf_id } });
@@ -31,9 +27,9 @@ export default function LibraryLayout({ settings, setSetting, children }) {
             <BookInfoModal/>
             <BookRecreateModal update={onBookRecreate}/>
             <BookDeleteModal update={onBookDelete}/>
-            <ThemeChangeModal settings={settings} setSetting={setSetting}/>
+            <ThemeChangeModal/>
             <div className="d-flex flex-column min-vh-100">
-                <LibraryHeader logout={logout}/>
+                <LibraryHeader/>
                 {cloneElement(children, { onUpdate: update })}
             </div>
         </>

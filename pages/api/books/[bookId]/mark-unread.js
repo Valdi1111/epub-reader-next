@@ -1,7 +1,11 @@
-import { checkIntParam, handleUpdateError } from "@/core/utils";
+import { checkIntParam, checkToken, handleUpdateError } from "@/core/utils";
 import { markUnread } from "@/core/book";
 
 export default async function handler(req, res) {
+    const user = await checkToken(req, res);
+    if (!user) {
+        return;
+    }
     if (req.method !== 'PUT') {
         return res.status(405).json({ error: true, message: 'Wrong method!' });
     }

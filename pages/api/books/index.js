@@ -1,7 +1,11 @@
 import { create } from "@/core/book";
-import { checkBodyParams, handleError } from "@/core/utils";
+import { checkBodyParams, checkToken, handleError } from "@/core/utils";
 
 export default async function handler(req, res) {
+    const user = await checkToken(req, res);
+    if (!user) {
+        return;
+    }
     if (req.method !== 'POST') {
         return res.status(405).json({ error: true, message: 'Wrong method!' });
     }

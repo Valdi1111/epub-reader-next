@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { getToken } from "next-auth/jwt";
 
 export function checkBodyParams(res, params) {
     const parameters = [];
@@ -72,4 +73,20 @@ export function handleUpdateError(res, e, message) {
         }
     }
     return handleError(res, e);
+}
+
+export async function checkToken(req, res) {
+    const token = await getToken({ req });
+    if (token) {
+        // Signed in
+        //console.log("JSON Web Token", JSON.stringify(token, null, 2))
+        return true;
+    } else {
+        // Not Signed in
+        res.status(401).json({
+            error: true,
+            message: 'Invalid token!'
+        });
+        return null;
+    }
 }

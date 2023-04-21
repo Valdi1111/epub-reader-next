@@ -2,8 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy, faDownload, faRotateLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 
-//import {copyImageToClipboard} from "copy-image-clipboard"
-
 export default function ImageViewModal() {
     const [title, setTitle] = useState('Image from book');
     const [rotation, setRotation] = useState(0);
@@ -44,26 +42,30 @@ export default function ImageViewModal() {
 
     async function copy() {
         console.debug("Copying image to clipboard...");
-        // TODO FIX THIS
-        //copyImageToClipboard(img.current.src)
-        //    .then(() => console.debug("Image copied successfully!"))
-        //    .catch(err => console.error(err));
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.current.naturalWidth
+        canvas.height = img.current.naturalHeight
+        ctx.drawImage(img.current, 0, 0);
+        canvas.toBlob(async blob => {
+            await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+        }, 'image/png', 1);
     }
 
     async function download() {
         console.debug("Downloading image...");
         const res = await fetch(img.current.src);
         const blob = await res.blob();
-        const element = document.createElement("a");
+        const element = document.createElement('a');
         element.href = URL.createObjectURL(blob);
-        element.download = img.current.alt || "image";
+        element.download = img.current.alt || 'image';
         element.click();
         console.debug("Image downloaded successfully!");
     }
 
     function widthChange(e) {
-        img.current.style.width = e.value + "%";
-        label.current.innerHTML = e.value + "%";
+        img.current.style.width = e.value + '%';
+        label.current.innerHTML = e.value + '%';
     }
 
     function wheelChange(e) {
@@ -90,7 +92,7 @@ export default function ImageViewModal() {
                     <div className="modal-body p-0">
                         <img ref={img} alt="" src="" width="100%"/>
                     </div>
-                    <div id="image-view-modal-footer" className="modal-footer">
+                    <div className="modal-footer">
                         <button className="btn btn-icon btn-outline-secondary" onClick={copy}>
                             <FontAwesomeIcon icon={faCopy} width={16} height={16}/>
                         </button>
