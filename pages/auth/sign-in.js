@@ -82,7 +82,7 @@ export default function SingIn() {
     }
 
     return (
-        <>
+        <main className="vh-100 container d-flex flex-column flex-lg-row align-items-center justify-content-center">
             <div className="mt-3 mt-lg-0 col-12 col-md-9 col-lg-6 col-xl-6">
                 <Image src="/login.svg" alt="Login image" className="img-fluid w-100 h-auto" width={0} height={0}/>
             </div>
@@ -129,7 +129,7 @@ export default function SingIn() {
                     </div>
                 </form>
             </div>
-        </>
+        </main>
     );
 }
 
@@ -139,9 +139,7 @@ SingIn.getLayout = function getLayout(Component, pageProps) {
             <Head>
                 <title>Sing in</title>
             </Head>
-            <main className="vh-100 container d-flex flex-column flex-lg-row align-items-center justify-content-center">
-                <Component {...pageProps}/>
-            </main>
+            <Component {...pageProps}/>
         </>
     );
 }
