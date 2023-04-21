@@ -1,13 +1,12 @@
 import ModalTheme from "@/components/library/modals/theme/ModalTheme";
-import SettingsContext from "@/components/SettingsContext";
-import { useContext, useEffect, useRef, useState } from "react";
-import { THEME, THEMES } from "../../../Settings";
+import { THEMES, useThemes } from "@/components/ThemeContext";
+import { useEffect, useRef, useState } from "react";
 
 export const PREFIX = 'theme-modal';
 export const CHECKBOX_NAME = PREFIX + '-select-theme';
 
 export default function ThemeChangeModal() {
-    const [settings, setSetting] = useContext(SettingsContext);
+    const [theme, setTheme] = useThemes();
     const modal = useRef();
     const [themes, setThemes] = useState({});
 
@@ -22,7 +21,7 @@ export default function ThemeChangeModal() {
 
     function confirm() {
         const theme = modal.current.querySelector(`div.modal-body input[name='${CHECKBOX_NAME}']:checked`);
-        setSetting(THEME, theme.value);
+        setTheme(theme.value);
     }
 
     return (
@@ -36,7 +35,7 @@ export default function ThemeChangeModal() {
                     </div>
                     <div className="modal-body">
                         {Object.entries(themes).map(([id, value]) =>
-                            <ModalTheme key={id} settings={settings} id={id} name={value.name}/>
+                            <ModalTheme key={id} theme={theme} id={id} name={value.name}/>
                         )}
                     </div>
                     <div className="modal-footer">

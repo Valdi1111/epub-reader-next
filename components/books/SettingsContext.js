@@ -1,4 +1,18 @@
-// Settings keys
+import React, { useContext } from "react";
+
+const SettingsContext = React.createContext([]);
+SettingsContext.displayName = 'SettingsContext';
+
+export default SettingsContext;
+
+export function useSettings() {
+    return useContext(SettingsContext);
+}
+
+export const SettingsProvider = SettingsContext.Provider;
+export const SettingsConsumer = SettingsContext.Consumer;
+
+// Settings constants
 export const FONT = 'font';
 export const FORCE_FONT = 'force-font';
 export const SPACING = 'spacing';
@@ -8,7 +22,6 @@ export const FONT_SIZE = 'font-size';
 export const FORCE_FONT_SIZE = 'force-font-size';
 export const JUSTIFY = 'justify';
 export const LAYOUT = 'layout';
-export const THEME = 'theme';
 export const UPDATE_LAST_READ = 'update-last-read';
 
 export const FONTS = {
@@ -46,35 +59,4 @@ export const LAYOUTS = {
 
 export function isWheelAllowed(layout) {
     return layout === 'auto' || layout === 'single';
-}
-
-export const THEMES = {
-    light: {
-        name: 'Light',
-        css: {
-            body: { background: '#fff', color: '#000' },
-            'a:link': { color: 'blue' }
-        }
-    },
-    sepia: {
-        name: 'Sepia',
-        css: {
-            body: { background: '#efe7dd', color: '#5b4636' },
-            'a:link': { color: 'darkcyan' }
-        }
-    },
-    dark: {
-        name: 'Dark',
-        css: {
-            body: { background: '#292929', color: '#dedede' },
-            'a:link': { color: 'cornflowerblue' }
-        }
-    },
-    nord: {
-        name: 'Nord',
-        css: {
-            body: { background: '#2e3440', color: '#d8dee9' },
-            'a:link': { color: '#88c0d0' }
-        }
-    }
 }

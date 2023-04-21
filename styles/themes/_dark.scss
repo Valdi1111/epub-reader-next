@@ -1,0 +1,16 @@
+@include color-mode(dark, true) {
+  color-scheme: dark;
+  $body-color: #dedede;
+  $body-bg: #292929;
+  $border-color: lighten($body-bg, 10%);
+
+  $active-color: darken($body-color, 5%);
+  $active-bg: darken($body-bg, 5%);
+
+  $hover-color: darken($body-color, 3%);
+  $hover-bg: darken($body-bg, 3%);
+
+  $input-bg: darken($body-bg, 3%);
+
+  @import "variables";
+}

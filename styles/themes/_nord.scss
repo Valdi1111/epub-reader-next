@@ -1,0 +1,16 @@
+@include color-mode(nord, true) {
+  color-scheme: nord;
+  $body-color: #d8dee9;
+  $body-bg: #2e3440;
+  $border-color: lighten($body-bg, 10%);
+
+  $active-color: darken($body-color, 5%);
+  $active-bg: darken($body-bg, 5%);
+
+  $hover-color: darken($body-color, 3%);
+  $hover-bg: darken($body-bg, 3%);
+
+  $input-bg: darken($body-bg, 3%);
+
+  @import "variables";
+}

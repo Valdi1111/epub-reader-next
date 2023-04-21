@@ -1,0 +1,16 @@
+@include color-mode(sepia, true) {
+  color-scheme: sepia;
+  $body-color: #705534;
+  $body-bg: #efe7dd;
+  $border-color: darken($body-bg, 20%);
+
+  $active-color: darken($body-color, 10%);
+  $active-bg: darken($body-bg, 10%);
+
+  $hover-color: darken($body-color, 5%);
+  $hover-bg: darken($body-bg, 5%);
+
+  $input-bg: darken($body-bg, 5%);
+
+  @import "variables";
+}

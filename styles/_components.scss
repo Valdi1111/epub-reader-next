@@ -44,11 +44,11 @@
 
 ::-webkit-scrollbar-thumb {
   border-radius: 8px;
-  background-color: $border-color;
+  background-color: var(--#{$prefix}border-color);
 }
 
 ::-webkit-scrollbar-corner {
-  background-color: $body-bg;
+  background-color: var(--#{$prefix}body-bg);
 }
 
 .btn-icon, .btn-social {

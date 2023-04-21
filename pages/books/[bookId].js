@@ -1,20 +1,23 @@
-import ImageViewModal from "@/components/books/modals/ImageViewModal";
 import BookHeader from "@/components/books/BookHeader";
 import BookFooter from "@/components/books/BookFooter";
 import BookBody from "@/components/books/BookBody";
-import SettingsContext from "@/components/SettingsContext";
+import { useEffect, useRef, useState } from "react";
 import { EPUB_URL, updatePosition } from "@/api/book";
-import { getById } from "@/core/book";
-import { useContext, useEffect, useRef, useState } from "react";
 import { Book, EpubCFI } from "epubjs";
+import { getById } from "@/core/book";
+import { THEMES, useThemes } from "@/components/ThemeContext";
 import {
-    FONT, FONT_SIZE, SPACING, MARGINS, WIDTH, FORCE_FONT, FORCE_FONT_SIZE,
-    JUSTIFY, LAYOUT, THEME, FONTS, LAYOUTS, THEMES, isWheelAllowed, UPDATE_LAST_READ
-} from "@/components/Settings";
-import Head from "next/head";
+    FONT, FONTS, FONT_SIZE,
+    SPACING, MARGINS, WIDTH,
+    FORCE_FONT, FORCE_FONT_SIZE, JUSTIFY,
+    LAYOUT, LAYOUTS,
+    UPDATE_LAST_READ, isWheelAllowed, useSettings
+} from "@/components/books/SettingsContext";
+import BookLayout from "@/components/books/BookLayout";
 
 export default function BookId(props) {
-    const [settings, setSetting] = useContext(SettingsContext);
+    const [settings, setSetting] = useSettings();
+    const [theme, setTheme] = useThemes();
     const { id, url } = props.book;
     const { title } = props.book.book_metadata;
     const { navigation, locations } = props.book.book_cache;
@@ -77,7 +80,7 @@ export default function BookId(props) {
             return;
         }
         updateTheme();
-    }, [settings[THEME]]);
+    }, [theme]);
 
     /**
      * Load book
@@ -219,7 +222,7 @@ export default function BookId(props) {
      * Update book theme
      */
     function updateTheme() {
-        book.current.rendition.themes.select(settings[THEME]);
+        book.current.rendition.themes.select(theme);
     }
 
     function updatePage(loc) {
@@ -311,24 +314,22 @@ export default function BookId(props) {
     }
 
     return (
-        <>
-            <Head>
-                <title>Book</title>
-            </Head>
-            <ImageViewModal/>
-            <div className="vw-100 vh-100 d-flex flex-column">
-                <BookHeader title={title} chapter={chapter} navigation={navigation} navigateTo={navigateTo}
-                            search={search}/>
-                <BookBody loaded={loaded}/>
-                <BookFooter chapter={chapter} section={section} location={location} percentage={percentage}
-                            prev={prev} next={next}/>
-            </div>
-        </>
+        <div className="vw-100 vh-100 d-flex flex-column">
+            <BookHeader title={title} chapter={chapter} navigation={navigation} navigateTo={navigateTo}
+                        search={search}/>
+            <BookBody loaded={loaded}/>
+            <BookFooter chapter={chapter} section={section} location={location} percentage={percentage} prev={prev}
+                        next={next}/>
+        </div>
     );
 }
 
 BookId.getLayout = function getLayout(Component, pageProps) {
-    return <Component {...pageProps}/>;
+    return (
+        <BookLayout>
+            <Component {...pageProps}/>
+        </BookLayout>
+    );
 }
 
 export async function getServerSideProps(context) {

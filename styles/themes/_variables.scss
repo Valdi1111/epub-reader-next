@@ -1,0 +1,79 @@
+& {
+  // scss-docs-start root-dark-mode-vars
+  --#{$prefix}body-color: #{$body-color};
+  --#{$prefix}body-color-rgb: #{to-rgb($body-color)};
+  --#{$prefix}body-bg: #{$body-bg};
+  --#{$prefix}body-bg-rgb: #{to-rgb($body-bg)};
+
+  --#{$prefix}border-color: #{$border-color};
+
+  --#{$prefix}link-color: #{$body-color};
+  --#{$prefix}link-hover-color: #{$body-color};
+  --#{$prefix}link-color-rgb: #{to-rgb($body-color)};
+  --#{$prefix}link-hover-color-rgb: #{to-rgb($body-color)};
+  // scss-docs-end root-dark-mode-vars
+
+  .dropdown-menu {
+    // scss-docs-start dropdown-css-vars
+    --#{$prefix}dropdown-color: #{$body-color};
+    --#{$prefix}dropdown-bg: #{$body-bg};
+
+    --#{$prefix}dropdown-link-color: #{$body-color};
+    --#{$prefix}dropdown-border-color: #{$border-color};
+
+    --#{$prefix}dropdown-link-hover-color: #{$hover-color};
+    --#{$prefix}dropdown-link-hover-bg: #{$hover-bg};
+    --#{$prefix}dropdown-link-active-color: #{$active-color};
+    --#{$prefix}dropdown-link-active-bg: #{$active-bg};
+
+    --#{$prefix}dropdown-divider-bg: #{$border-color};
+    // scss-docs-end dropdown-css-vars
+  }
+
+  .list-group {
+    // scss-docs-start list-group-css-vars
+    --#{$prefix}list-group-color: #{$body-color};
+    --#{$prefix}list-group-bg: #{$body-bg};
+    --#{$prefix}list-group-border-color: #{$border-color};
+
+    --#{$prefix}list-group-active-color: #{$active-color};
+    --#{$prefix}list-group-active-bg: #{$active-bg};
+    --#{$prefix}list-group-active-border-color: #{$active-bg};
+    // scss-docs-end list-group-css-vars
+  }
+
+  .accordion {
+    // scss-docs-start accordion-css-vars
+    --#{$prefix}accordion-active-color: #{$active-color};
+    --#{$prefix}accordion-active-bg: #{$active-bg};
+    $accordion-button-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$body-color}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+    --#{$prefix}accordion-btn-icon: #{escape-svg($accordion-button-icon)};
+    --#{$prefix}accordion-btn-active-icon: #{escape-svg($accordion-button-icon)};
+    // scss-docs-end accordion-css-vars
+  }
+
+  .form-control {
+    background-color: $input-bg;
+  }
+
+  .form-select {
+    background-color: $input-bg;
+  }
+
+  .form-range {
+    &::-webkit-slider-runnable-track {
+      background-color: $input-bg;
+    }
+
+    &::-moz-range-track {
+      background-color: $input-bg;
+    }
+  }
+
+  .btn-close {
+    // scss-docs-start close-css-vars
+    $btn-close-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$body-color}'><path d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/></svg>");
+    --#{$prefix}btn-close-bg: #{ escape-svg($btn-close-bg) };
+    // scss-docs-end close-css-vars
+  }
+}

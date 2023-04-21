@@ -1,54 +1,19 @@
-$body-color: #dedede;
-$body-bg: #292929;
+$enable-dark-mode: false;
 
-$border-color: lighten($body-bg, 10%);
-
-$link-color: $body-color;
 $link-decoration: none;
 
-/* Btn close */
-$btn-close-color: $body-color;
-
-/* Dropdowns */
-$dropdown-color: $body-color;
-$dropdown-bg: $body-bg;
-
-$dropdown-link-color: $body-color;
-$dropdown-border-color: $border-color;
-
-$dropdown-link-hover-color: darken($body-color, 3%);
-$dropdown-link-hover-bg: darken($body-bg, 3%);
-
-$dropdown-link-active-color: darken($body-color, 5%);
-$dropdown-link-active-bg: darken($body-bg, 5%);
-
-/* List groups */
-$list-group-color: $body-color;
-$list-group-bg: $body-bg;
-$list-group-border-color: $border-color;
-
-$list-group-active-color: darken($body-color, 5%);
-$list-group-active-bg: darken($body-bg, 5%);
-
-/* Accordion */
-$accordion-button-active-bg: darken($body-bg, 5%);
-$accordion-button-active-color: darken($body-color, 5%);
-
-/* Modals */
-$modal-content-color: $body-color;
-$modal-content-bg: $body-bg;
-
-/* Inputs */
-$input-bg: darken($body-bg, 3%);
-$input-disabled-bg: $input-bg;
-$input-border-color: $border-color;
-$input-focus-border-color: $input-border-color;
-
-$form-check-input-border: 1px solid $border-color;
-
-$form-range-track-bg: $input-bg;
-
 @import "bootstrap/scss/bootstrap";
+
+// Themes
+
+$color-mode-type: data;
+
+@import "themes/light";
+@import "themes/dark";
+@import "themes/sepia";
+@import "themes/nord";
+
+// Additional css
 
 @import "components";
 @import "image-view-modal";

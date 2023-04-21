@@ -1,9 +1,7 @@
-import SettingsContext from "@/components/SettingsContext";
-import { FORCE_FONT } from "../../Settings";
-import { useContext } from "react";
+import { FORCE_FONT, useSettings } from "@/components/books/SettingsContext";
 
 export default function SettingsForceFont() {
-    const [settings, setSetting] = useContext(SettingsContext);
+    const [settings, setSetting] = useSettings();
 
     function forceFont(e) {
         setSetting(FORCE_FONT, e.target.checked ? "true" : "false");
