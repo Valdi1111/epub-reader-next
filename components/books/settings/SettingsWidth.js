@@ -1,9 +1,9 @@
-import { useSettings, WIDTH } from "@/components/books/SettingsContext";
+import { useBookSettings, WIDTH } from "@/components/books/BookSettingsContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function SettingsWidth() {
-    const [settings, setSetting] = useSettings();
+    const [settings, setSetting] = useBookSettings();
 
     function width(e, up) {
         const input = document.getElementById('input-width');

@@ -1,7 +1,7 @@
-import { FONT, FONTS, useSettings } from "@/components/books/SettingsContext";
+import { FONT, FONTS, useBookSettings } from "@/components/books/BookSettingsContext";
 
 export default function SettingsFont() {
-    const [settings, setSetting] = useSettings();
+    const [settings, setSetting] = useBookSettings();
 
     function font(e) {
         setSetting(FONT, e.target.value);

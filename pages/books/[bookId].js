@@ -8,8 +8,8 @@ import {
     SPACING, MARGINS, WIDTH,
     FORCE_FONT, FORCE_FONT_SIZE, JUSTIFY,
     LAYOUT, LAYOUTS,
-    UPDATE_LAST_READ, isWheelAllowed, useSettings
-} from "@/components/books/SettingsContext";
+    UPDATE_LAST_READ, isWheelAllowed, useBookSettings
+} from "@/components/books/BookSettingsContext";
 import { EPUB_URL, updatePosition } from "@/api/book";
 import { getById } from "@/core/book";
 import { useEffect, useRef, useState } from "react";
@@ -17,7 +17,7 @@ import { Book, EpubCFI } from "epubjs";
 import Head from "next/head";
 
 export default function BookId(props) {
-    const [settings, setSetting] = useSettings();
+    const [settings, setSetting] = useBookSettings();
     const [theme, setTheme] = useThemes();
     const { id, url } = props.book;
     const { title } = props.book.book_metadata;

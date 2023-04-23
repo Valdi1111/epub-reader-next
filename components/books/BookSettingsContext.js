@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 
-const SettingsContext = React.createContext([]);
-SettingsContext.displayName = 'SettingsContext';
+const BookSettingsContext = React.createContext([]);
+BookSettingsContext.displayName = 'BookSettingsContext';
 
-export default SettingsContext;
+export default BookSettingsContext;
 
-export function useSettings() {
-    return useContext(SettingsContext);
+export function useBookSettings() {
+    return useContext(BookSettingsContext);
 }
 
-export const SettingsProvider = SettingsContext.Provider;
-export const SettingsConsumer = SettingsContext.Consumer;
+export const BookSettingsProvider = BookSettingsContext.Provider;
+export const BookSettingsConsumer = BookSettingsContext.Consumer;
 
 // Settings constants
 export const FONT = 'font';

@@ -2,7 +2,7 @@ import LibraryShelvesLayout from "@/components/library/shelves/LibraryShelvesLay
 import ShelfEditModal from "@/components/library/shelves/modals/ShelfEditModal";
 import ShelfDeleteModal from "@/components/library/shelves/modals/ShelfDeleteModal";
 import ShelvesContent from "@/components/library/shelves/content/ShelvesContent";
-import { useBookUpdate } from "@/components/library/BookUpdateContext";
+import { useLibraryUpdate } from "@/components/library/LibraryUpdateContext";
 import { useShelves } from "@/components/library/shelves/ShelvesContext";
 import { getShelf, getShelfContent, getShelves } from "@/core/shelves";
 import { getBooksInShelf } from "@/api/shelves";
@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import Head from "next/head";
 
 export default function LibraryShelvesId(props) {
-    const [update, setUpdate] = useBookUpdate();
+    const [update, setUpdate] = useLibraryUpdate();
     const [shelves, setShelves, shelf, setShelf] = useShelves();
     const [content, setContent] = useState(props.content);
     const router = useRouter();

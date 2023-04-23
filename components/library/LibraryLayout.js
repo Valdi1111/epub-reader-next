@@ -1,4 +1,4 @@
-import { BookUpdateProvider } from "@/components/library/BookUpdateContext";
+import { LibraryUpdateProvider } from "@/components/library/LibraryUpdateContext";
 import LibraryHeader from "@/components/library/header/LibraryHeader";
 import BookAddModal from "@/components/library/modals/add/BookAddModal";
 import BookInfoModal from "@/components/library/modals/BookInfoModal";
@@ -22,7 +22,7 @@ export default function LibraryLayout({ children }) {
     }
 
     return (
-        <BookUpdateProvider value={[update, setUpdate]}>
+        <LibraryUpdateProvider value={[update, setUpdate]}>
             <div className="d-flex flex-column min-vh-100">
                 <BookAddModal update={onBookAdd}/>
                 <BookInfoModal/>
@@ -31,6 +31,6 @@ export default function LibraryLayout({ children }) {
                 <LibraryHeader/>
                 {children}
             </div>
-        </BookUpdateProvider>
+        </LibraryUpdateProvider>
     )
 }

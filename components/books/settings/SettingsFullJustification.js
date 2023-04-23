@@ -1,7 +1,7 @@
-import { JUSTIFY, useSettings } from "@/components/books/SettingsContext";
+import { JUSTIFY, useBookSettings } from "@/components/books/BookSettingsContext";
 
 export default function SettingsFullJustification() {
-    const [settings, setSetting] = useSettings();
+    const [settings, setSetting] = useBookSettings();
 
     function justify(e) {
         setSetting(JUSTIFY, e.target.checked ? "true" : "false");

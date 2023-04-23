@@ -1,5 +1,5 @@
 import SettingsLayout from "@/components/books/settings/SettingsLayout";
-import { LAYOUTS } from "@/components/books/SettingsContext";
+import { LAYOUTS } from "@/components/books/BookSettingsContext";
 
 export default function SettingsLayouts() {
     return (

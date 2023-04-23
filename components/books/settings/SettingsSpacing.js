@@ -1,9 +1,9 @@
-import { SPACING, useSettings } from "@/components/books/SettingsContext";
+import { SPACING, useBookSettings } from "@/components/books/BookSettingsContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function SettingsSpacing() {
-    const [settings, setSetting] = useSettings();
+    const [settings, setSetting] = useBookSettings();
 
     function spacing(e, up) {
         const input = document.getElementById('input-spacing');

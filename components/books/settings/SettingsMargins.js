@@ -1,9 +1,9 @@
-import { MARGINS, useSettings } from "@/components/books/SettingsContext";
+import { MARGINS, useBookSettings } from "@/components/books/BookSettingsContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function SettingsMargins() {
-    const [settings, setSetting] = useSettings();
+    const [settings, setSetting] = useBookSettings();
 
     function margins(e, up) {
         const input = document.getElementById('input-margins');

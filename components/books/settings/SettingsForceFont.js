@@ -1,7 +1,7 @@
-import { FORCE_FONT, useSettings } from "@/components/books/SettingsContext";
+import { FORCE_FONT, useBookSettings } from "@/components/books/BookSettingsContext";
 
 export default function SettingsForceFont() {
-    const [settings, setSetting] = useSettings();
+    const [settings, setSetting] = useBookSettings();
 
     function forceFont(e) {
         setSetting(FORCE_FONT, e.target.checked ? "true" : "false");

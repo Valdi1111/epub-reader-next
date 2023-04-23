@@ -5,8 +5,8 @@ import {
     SPACING, MARGINS, WIDTH,
     FORCE_FONT, FORCE_FONT_SIZE, JUSTIFY,
     LAYOUT, LAYOUTS,
-    UPDATE_LAST_READ, SettingsProvider
-} from "@/components/books/SettingsContext";
+    UPDATE_LAST_READ, BookSettingsProvider
+} from "@/components/books/BookSettingsContext";
 import { useEffect, useState } from "react";
 
 export default function BookLayout({ children }) {
@@ -59,11 +59,11 @@ export default function BookLayout({ children }) {
     return (
         <>
             <ImageViewModal/>
-            <SettingsProvider value={[settings, setSetting]}>
+            <BookSettingsProvider value={[settings, setSetting]}>
                 <div className="vw-100 vh-100 d-flex flex-column">
                     {children}
                 </div>
-            </SettingsProvider>
+            </BookSettingsProvider>
         </>
     );
 }

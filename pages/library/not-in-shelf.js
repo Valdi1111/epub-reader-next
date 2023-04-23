@@ -1,14 +1,14 @@
 import LibraryLayout from "@/components/library/LibraryLayout";
 import LibraryItem from "@/components/library/item/LibraryItem";
 import LibraryItemAdder from "@/components/library/item/LibraryItemAdder";
-import { useBookUpdate } from "@/components/library/BookUpdateContext";
+import { useLibraryUpdate } from "@/components/library/LibraryUpdateContext";
 import { BOOKS_PER_PAGE, getBooksNotInShelf } from "@/api/library";
 import { getNotInShelf } from "@/core/library";
 import { useEffect, useState } from "react";
 import Head from "next/head";
 
 export default function LibraryNotInShelf(props) {
-    const [update, setUpdate] = useBookUpdate();
+    const [update, setUpdate] = useLibraryUpdate();
     const [hasMore, setHasMore] = useState(false);
     const [books, setBooks] = useState([]);
     const [page, setPage] = useState(1);

@@ -1,7 +1,7 @@
-import { LAYOUT, useSettings } from "@/components/books/SettingsContext";
+import { LAYOUT, useBookSettings } from "@/components/books/BookSettingsContext";
 
 export default function SettingsLayout({ id, name }) {
-    const [settings, setSetting] = useSettings();
+    const [settings, setSetting] = useBookSettings();
 
     function layout(e) {
         setSetting(LAYOUT, e.target.value);

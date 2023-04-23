@@ -1,7 +1,7 @@
-import { FONT_SIZE, FONT_SIZES, useSettings } from "@/components/books/SettingsContext";
+import { FONT_SIZE, FONT_SIZES, useBookSettings } from "@/components/books/BookSettingsContext";
 
 export default function SettingsFontSize() {
-    const [settings, setSetting] = useSettings();
+    const [settings, setSetting] = useBookSettings();
 
     function fontSize(e) {
         setSetting(FONT_SIZE, e.target.value);
