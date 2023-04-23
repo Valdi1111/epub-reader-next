@@ -1,10 +1,7 @@
+import BookLayout from "@/components/books/BookLayout";
 import BookHeader from "@/components/books/BookHeader";
 import BookFooter from "@/components/books/BookFooter";
 import BookBody from "@/components/books/BookBody";
-import { useEffect, useRef, useState } from "react";
-import { EPUB_URL, updatePosition } from "@/api/book";
-import { Book, EpubCFI } from "epubjs";
-import { getById } from "@/core/book";
 import { THEMES, useThemes } from "@/components/ThemeContext";
 import {
     FONT, FONTS, FONT_SIZE,
@@ -13,7 +10,11 @@ import {
     LAYOUT, LAYOUTS,
     UPDATE_LAST_READ, isWheelAllowed, useSettings
 } from "@/components/books/SettingsContext";
-import BookLayout from "@/components/books/BookLayout";
+import { useEffect, useRef, useState } from "react";
+import { EPUB_URL, updatePosition } from "@/api/book";
+import { Book, EpubCFI } from "epubjs";
+import { getById } from "@/core/book";
+import Head from "next/head";
 
 export default function BookId(props) {
     const [settings, setSetting] = useSettings();
@@ -41,7 +42,7 @@ export default function BookId(props) {
             return;
         }
         ready.current = false;
-        updateLayout();
+        updateLayout(mark);
     }, [settings[LAYOUT], settings[MARGINS]]);
 
     /**
@@ -98,7 +99,7 @@ export default function BookId(props) {
             book.current.locations.load(locations);
             console.log("Locations loaded!");
             document.onkeydown = onKeyDown;
-            updateLayout();
+            updateLayout(props.book.book_progress);
             setLoaded(true);
         });
     }, [id]);
@@ -121,7 +122,7 @@ export default function BookId(props) {
     /**
      * Render book
      */
-    function updateLayout() {
+    function updateLayout(localMark) {
         const area = document.getElementById('book-view');
         area.innerHTML = '';
         const gap = parseInt(settings[MARGINS]);
@@ -132,10 +133,10 @@ export default function BookId(props) {
             height: '100%',
             gap: gap
         });
-        if (!mark.position) {
+        if (!localMark.position) {
             rendition.display().then(r => ready.current = true);
         } else {
-            rendition.display(mark.position).then(r => ready.current = true);
+            rendition.display(localMark.position).then(r => ready.current = true);
         }
         rendition.on('relocated', updatePage);
         rendition.on('keydown', onKeyDown);
@@ -314,13 +315,16 @@ export default function BookId(props) {
     }
 
     return (
-        <div className="vw-100 vh-100 d-flex flex-column">
+        <>
+            <Head>
+                <title>{title}</title>
+            </Head>
             <BookHeader title={title} chapter={chapter} navigation={navigation} navigateTo={navigateTo}
                         search={search}/>
             <BookBody loaded={loaded}/>
             <BookFooter chapter={chapter} section={section} location={location} percentage={percentage} prev={prev}
                         next={next}/>
-        </div>
+        </>
     );
 }
 

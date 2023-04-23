@@ -8,7 +8,6 @@ import {
     UPDATE_LAST_READ, SettingsProvider
 } from "@/components/books/SettingsContext";
 import { useEffect, useState } from "react";
-import Head from "next/head";
 
 export default function BookLayout({ children }) {
     const [settings, setSettings] = useState({});
@@ -59,12 +58,11 @@ export default function BookLayout({ children }) {
 
     return (
         <>
-            <Head>
-                <title>Book</title>
-            </Head>
             <ImageViewModal/>
             <SettingsProvider value={[settings, setSetting]}>
-                {children}
+                <div className="vw-100 vh-100 d-flex flex-column">
+                    {children}
+                </div>
             </SettingsProvider>
         </>
     );

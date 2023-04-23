@@ -1,5 +1,5 @@
-import { updateCover, nullCover, removeFile, saveFile } from "@/core/cover";
-import { checkIntParam, checkToken, handleUpdateError } from "@/core/utils";
+import { updateCover, nullCover, removeFile, saveFile, getFile } from "@/core/cover";
+import { checkIntParam, checkToken, handleError, handleUpdateError } from "@/core/utils";
 
 export const config = {
     api: {
@@ -15,6 +15,18 @@ export default async function handler(req, res) {
     const user = await checkToken(req, res);
     if (!user) {
         return;
+    }
+    if (req.method === 'GET') {
+        try {
+            const cover = await getFile(id);
+            if (!cover) {
+                return res.status(400).json({ error: true, message: 'Cover file not found for this book!' });
+            }
+            res.setHeader('Content-Type', 'image/jpeg');
+            return res.send(cover);
+        } catch (e) {
+            return handleError(res, e);
+        }
     }
     if (req.method === 'POST') {
         try {

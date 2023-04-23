@@ -37,6 +37,5 @@ next-env.d.ts
 
 # webstorm
 /.idea/
-/public/covers/
 /todo.txt
 /db_fix.js

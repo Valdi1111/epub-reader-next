@@ -1,4 +1,4 @@
-import { COVERS_URL } from "@/api/library";
+import { getCoverUrl } from "@/api/library";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -7,7 +7,7 @@ export default function ItemCover({ id, cover, title, creator }) {
         return (
             <Link className="d-flex justify-content-center align-items-center position-relative" title={title}
                   href={`/books/${id}`} style={{ height: "225px" }}>
-                <Image className="img-fluid mt-auto" src={COVERS_URL + cover} alt="Book cover" loading="lazy"
+                <Image className="img-fluid mt-auto" src={getCoverUrl(id)} alt="Book cover" loading="lazy"
                        fill={true} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                        style={{ objectFit: "contain", objectPosition: "bottom" }}/>
             </Link>

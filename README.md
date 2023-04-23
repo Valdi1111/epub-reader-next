@@ -2,11 +2,31 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+Install dependencies
+
+```bash
+npm install
+```
+
 Setup prisma db connection in prisma/schema.prisma file.
 See documentation [here](https://pris.ly/d/connection-strings).
 
-Run the development server:
+Generate prisma client from database.
+
+```bash
+npx prisma db pull
+npx prisma generate
+```
+
+### Run the development server:
 
 ```bash
 npm run dev
+```
+
+### Deploy:
+
+```bash
+npm run build
+npm run start
 ```

@@ -1,8 +1,11 @@
 import axios from "axios";
 
-export const COVERS_URL = '/covers/';
 export const MISSING_COVER_URL = '/missing-cover.png';
 export const BOOKS_PER_PAGE = 20;
+
+export function getCoverUrl(id) {
+    return `/api/books/${id}/cover`;
+}
 
 export async function getBooksAll(limit, offset) {
     return axios.get(

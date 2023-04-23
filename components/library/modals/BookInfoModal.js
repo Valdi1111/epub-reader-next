@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { COVERS_URL, MISSING_COVER_URL } from "@/api/library";
+import { getCoverUrl, MISSING_COVER_URL } from "@/api/library";
 import { getMetadata } from "@/api/book";
 import Image from "next/image";
 
@@ -21,7 +21,7 @@ export default function BookInfoModal() {
             const id = e.relatedTarget.getAttribute("data-bs-id");
             setPath(e.relatedTarget.getAttribute("data-bs-url"));
             if (e.relatedTarget.getAttribute("data-bs-cover") !== null) {
-                setCover(COVERS_URL + e.relatedTarget.getAttribute("data-bs-cover"));
+                setCover(getCoverUrl(id));
             } else {
                 setCover(MISSING_COVER_URL);
             }

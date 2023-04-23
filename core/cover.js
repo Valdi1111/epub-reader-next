@@ -3,6 +3,8 @@ import { v4 } from "uuid";
 import prisma from "@/core/prisma";
 import fs from "fs/promises";
 import path from "path";
+import getConfig from "next/config";
+const { serverRuntimeConfig } = getConfig();
 
 export async function findCover(id) {
     return prisma.book_cache.findUnique({
@@ -25,17 +27,31 @@ export async function nullCover(id) {
     });
 }
 
+export async function getFile(id) {
+    const cache = await findCover(id);
+    if (!cache || !cache.cover) {
+        return null;
+    }
+    const cf = path.join(serverRuntimeConfig.COVER_FOLDER, cache.cover);
+    try {
+        return fs.readFile(cf);
+    } catch (err) {
+        console.error("Cannot read cover file", cf);
+        return null;
+    }
+}
+
 /**
  * Remove cover file if exists
  * @param id the book id
  * @returns {Promise<void>}
  */
 export async function removeFile(id) {
-    let cache = await findCover(id);
+    const cache = await findCover(id);
     if (!cache || !cache.cover) {
-        return;
+        return null;
     }
-    const cf = path.join(process.cwd(), 'public', 'covers', cache.cover);
+    const cf = path.join(serverRuntimeConfig.COVER_FOLDER, cache.cover);
     try {
         await fs.readFile(cf);
         return fs.unlink(cf);
@@ -46,7 +62,7 @@ export async function removeFile(id) {
 }
 
 export async function saveFile(req) {
-    const fileDir = path.join(process.cwd(), 'public', 'covers');
+    const fileDir = path.join(serverRuntimeConfig.COVER_FOLDER);
     try {
         await fs.readdir(fileDir);
     } catch (error) {
