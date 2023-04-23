@@ -47,7 +47,7 @@ export default function ShelfEditModal({ update }) {
                             <label htmlFor="edit-path" className="form-label">Path</label>
                             <input ref={path} type="text" className="form-control" id="edit-path"
                                    aria-describedby="edit-path-help" disabled={true}/>
-                            <div className="form-text">Insert a folder without the / at the end.</div>
+                            <div className="text-secondary">Insert a folder without the / at the end.</div>
                         </div>
                         <div className="mb-2">
                             <label htmlFor="edit-name" className="form-label">Name</label>

@@ -61,5 +61,5 @@ export async function getShelfContent(shelf) {
             data[folder] = [...data[folder], b];
         }
     });
-    return data;
+    return { _count: { book: books.length }, items: data };
 }

@@ -40,7 +40,7 @@ export default function ShelfAddModal({ update }) {
                             <label htmlFor="add-path" className="form-label">Path</label>
                             <input ref={path} type="text" className="form-control" id="add-path"
                                    aria-describedby="add-path-help"/>
-                            <div className="form-text">Insert a folder without the / at the end.</div>
+                            <div className="text-secondary">Insert a folder without the / at the end.</div>
                         </div>
                         <div className="mb-2">
                             <label htmlFor="add-name" className="form-label">Name</label>

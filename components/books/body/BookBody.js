@@ -1,4 +1,4 @@
-import BookLoadingScreen from "@/components/books/BookLoadingScreen";
+import BookLoadingScreen from "@/components/books/body/BookLoadingScreen";
 
 export default function BookBody({ loaded }) {
     return (

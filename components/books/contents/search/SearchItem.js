@@ -13,7 +13,7 @@ export default function SearchItem({ close, item, navigateTo }) {
 
     return (
         <li className="dropdown-item px-2" onClick={onClick}>
-            <p className="text-wrap text-muted mb-0" style={{ fontSize: "85%" }}>{item.chapter.label}</p>
+            <p className="text-wrap text-secondary mb-0" style={{ fontSize: "85%" }}>{item.chapter.label}</p>
             <span className="text-wrap">{item.excerpt}</span>
         </li>
     );

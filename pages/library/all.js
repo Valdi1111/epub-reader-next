@@ -1,14 +1,14 @@
 import LibraryLayout from "@/components/library/LibraryLayout";
 import LibraryItem from "@/components/library/item/LibraryItem";
 import LibraryItemAdder from "@/components/library/item/LibraryItemAdder";
-import BookUpdateContext from "@/components/library/BookUpdateContext";
+import { useBookUpdate } from "@/components/library/BookUpdateContext";
 import { BOOKS_PER_PAGE, getBooksAll } from "@/api/library";
-import { useContext, useEffect, useState } from "react";
 import { getAll } from "@/core/library";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 
 export default function LibraryAll(props) {
-    const [update, setUpdate] = useContext(BookUpdateContext);
+    const [update, setUpdate] = useBookUpdate();
     const [hasMore, setHasMore] = useState(false);
     const [books, setBooks] = useState([]);
     const [page, setPage] = useState(1);
@@ -74,6 +74,9 @@ LibraryAll.getLayout = function getLayout(Component, pageProps) {
 }
 
 export async function getServerSideProps() {
-    const books = await getAll(BOOKS_PER_PAGE + 1);
-    return { props: { books } }
+    return {
+        props: {
+            books: await getAll(BOOKS_PER_PAGE + 1)
+        }
+    };
 }

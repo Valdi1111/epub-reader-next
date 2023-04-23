@@ -1,7 +1,7 @@
 import BookLayout from "@/components/books/BookLayout";
-import BookHeader from "@/components/books/BookHeader";
-import BookFooter from "@/components/books/BookFooter";
-import BookBody from "@/components/books/BookBody";
+import BookHeader from "@/components/books/header/BookHeader";
+import BookFooter from "@/components/books/footer/BookFooter";
+import BookBody from "@/components/books/body/BookBody";
 import { THEMES, useThemes } from "@/components/ThemeContext";
 import {
     FONT, FONTS, FONT_SIZE,
@@ -10,10 +10,10 @@ import {
     LAYOUT, LAYOUTS,
     UPDATE_LAST_READ, isWheelAllowed, useSettings
 } from "@/components/books/SettingsContext";
-import { useEffect, useRef, useState } from "react";
 import { EPUB_URL, updatePosition } from "@/api/book";
-import { Book, EpubCFI } from "epubjs";
 import { getById } from "@/core/book";
+import { useEffect, useRef, useState } from "react";
+import { Book, EpubCFI } from "epubjs";
 import Head from "next/head";
 
 export default function BookId(props) {
@@ -121,6 +121,7 @@ export default function BookId(props) {
 
     /**
      * Render book
+     * @param localMark {{position: string|null, page: int}} book's bookmark
      */
     function updateLayout(localMark) {
         const area = document.getElementById('book-view');
@@ -245,11 +246,16 @@ export default function BookId(props) {
         return [].concat.apply([], items.map(item => [].concat.apply([item], flattenNav(item.subitems))));
     }
 
-    function getChapFromCfi(pos) {
+    /**
+     * Get navigation chapter from epub cfi if it exists, null otherwise.
+     * @param cfi {string} the cfi
+     * @returns {*} the chapter
+     */
+    function getChapFromCfi(cfi) {
         let prev = null;
         flattenNav(navigation).forEach(s => {
             if (s.cfi !== null) {
-                if (new EpubCFI().compare(pos, s.cfi) === -1) {
+                if (new EpubCFI().compare(cfi, s.cfi) === -1) {
                     return;
                 }
                 prev = s;
@@ -258,6 +264,12 @@ export default function BookId(props) {
         return prev;
     }
 
+    /**
+     * Search a string inside spine.
+     * @param item the spine item
+     * @param value the string to search
+     * @returns {Promise<*[]>} an array of results
+     */
     function searchSpine(item, value) {
         return item.load(book.current.load.bind(book.current))
             .then(item.find.bind(item, value))
@@ -268,6 +280,12 @@ export default function BookId(props) {
             }));
     }
 
+    /**
+     * Search a string inside the book
+     * @param value the string to search
+     * @param all true to search inside all the book, false to search only inside the current chapter
+     * @returns {Promise<*[]>}
+     */
     function search(value, all) {
         if (all) {
             return Promise.all(book.current.spine.spineItems.map(item => searchSpine(item, value)))
@@ -279,11 +297,10 @@ export default function BookId(props) {
 
     /**
      * Navigate to location
-     * @param href book location
+     * @param href {string} book location
      */
     function navigateTo(href) {
-        book.current.rendition.display(href);
-        console.debug("Navigate", href);
+        book.current.rendition.display(href).then(res => console.debug("Navigate", href));
     }
 
     /**
@@ -300,6 +317,9 @@ export default function BookId(props) {
         }
     }
 
+    /**
+     * Go to previous page
+     */
     function prev() {
         if (!ready.current) {
             return;
@@ -307,6 +327,9 @@ export default function BookId(props) {
         book.current.rendition.prev();
     }
 
+    /**
+     * Go to next page
+     */
     function next() {
         if (!ready.current) {
             return;

@@ -2,28 +2,19 @@ import LibraryShelvesLayout from "@/components/library/shelves/LibraryShelvesLay
 import ShelfEditModal from "@/components/library/shelves/modals/ShelfEditModal";
 import ShelfDeleteModal from "@/components/library/shelves/modals/ShelfDeleteModal";
 import ShelvesContent from "@/components/library/shelves/content/ShelvesContent";
-import ShelvesList from "@/components/library/shelves/list/ShelvesList";
-import BookUpdateContext from "@/components/library/BookUpdateContext";
+import { useBookUpdate } from "@/components/library/BookUpdateContext";
+import { useShelves } from "@/components/library/shelves/ShelvesContext";
 import { getShelf, getShelfContent, getShelves } from "@/core/shelves";
-import { useContext, useEffect, useState } from "react";
 import { getBooksInShelf } from "@/api/shelves";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
 
 export default function LibraryShelvesId(props) {
-    const [update, setUpdate] = useContext(BookUpdateContext);
-    const [shelves, setShelves] = useState(props.shelves);
-    const [shelf, setShelf] = useState(props.shelf);
+    const [update, setUpdate] = useBookUpdate();
+    const [shelves, setShelves, shelf, setShelf] = useShelves();
     const [content, setContent] = useState(props.content);
     const router = useRouter();
-
-    useEffect(() => {
-        setShelves(props.shelves);
-    }, [props.shelves]);
-
-    useEffect(() => {
-        setShelf(props.shelf);
-    }, [props.shelf]);
 
     useEffect(() => {
         setContent(props.content);
@@ -46,21 +37,33 @@ export default function LibraryShelvesId(props) {
 
     function refreshContent() {
         getBooksInShelf(shelf.id).then(
-            res => setContent(res.data),
+            res => {
+                // Update content
+                setContent(res.data);
+                // Update shelf book count
+                let allShelves = shelves;
+                let i = allShelves.findIndex(s => s.id === shelf.id);
+                allShelves[i]._count.book = res.data._count.book;
+                setShelves([...allShelves]);
+            },
             err => console.error(err)
-        )
+        );
     }
 
     function onShelfEdit(data) {
         let allShelves = shelves;
         let i = allShelves.findIndex(s => s.id === data.id);
         allShelves[i].name = data.name;
-        setShelves(allShelves);
+        setShelves([...allShelves]);
         setShelf(data);
     }
 
     function onShelfDelete(data) {
         router.push('/library/shelves');
+    }
+
+    if (!shelf) {
+        return <></>;
     }
 
     return (
@@ -70,25 +73,21 @@ export default function LibraryShelvesId(props) {
             </Head>
             <ShelfEditModal update={onShelfEdit}/>
             <ShelfDeleteModal update={onShelfDelete}/>
-            <div className="flex-grow-1 d-flex flex-row">
-                <ShelvesList shelves={shelves} shelf={shelf}/>
-                <ShelvesContent content={content}/>
-            </div>
+            <ShelvesContent content={content.items}/>
         </>
     );
 }
 
 LibraryShelvesId.getLayout = function getLayout(Component, pageProps) {
     return (
-        <LibraryShelvesLayout>
+        <LibraryShelvesLayout shelvesList={pageProps.shelves} shelfActive={pageProps.shelf}>
             <Component {...pageProps}/>
         </LibraryShelvesLayout>
     );
 }
 
-export async function getServerSideProps(context) {
-    const { shelfId } = context.params;
-    const shelves = await getShelves();
+export async function getServerSideProps({ params }) {
+    const { shelfId } = params;
     const id = parseInt(shelfId, 10);
     if (isNaN(id)) {
         return { notFound: true }
@@ -98,5 +97,11 @@ export async function getServerSideProps(context) {
         return { notFound: true }
     }
     const content = await getShelfContent(shelf);
-    return { props: { shelves, shelf, content } }
+    return {
+        props: {
+            shelves: await getShelves(),
+            shelf,
+            content
+        }
+    };
 }

@@ -51,7 +51,7 @@ export default function ContentSearch({ close, navigateTo, search }) {
                     <SearchItem key={i.cfi} close={close} item={i} navigateTo={navigateTo}/>
                 )}
             </ul>
-            <span className="dropdown-header text-muted py-0 px-2">{searchResults.length} results</span>
+            <span className="dropdown-header text-secondary py-0 px-2">{searchResults.length} results</span>
         </>
     );
 
