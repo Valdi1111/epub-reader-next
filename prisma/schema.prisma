@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model book {
+  id            Int            @id @default(autoincrement())
+  url           String         @db.VarChar(255)
+  created       DateTime       @default(now()) @db.DateTime(0)
+  shelf_id      Int?
+  shelf         shelf?         @relation(fields: [shelf_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "book_shelf_id_fk")
+  book_cache    book_cache?
+  book_metadata book_metadata?
+  book_progress book_progress?
+
+  @@index([shelf_id], map: "book_shelf_id_fk")
+}
+
+model book_cache {
+  book_id    Int     @id
+  cover      String? @db.VarChar(36)
+  navigation Json    @default(dbgenerated("(json_array())"))
+  locations  Json?   @default(dbgenerated("(json_array())"))
+  book       book    @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "book_cache_book_id_fk")
+}
+
+model book_metadata {
+  book_id       Int     @id
+  identifier    String? @db.VarChar(255)
+  title         String? @db.VarChar(255)
+  creator       String? @db.VarChar(255)
+  pubdate       String? @db.VarChar(255)
+  publisher     String? @db.VarChar(255)
+  language      String? @db.VarChar(255)
+  rights        String? @db.VarChar(255)
+  modified_date String? @db.VarChar(255)
+  book          book    @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "book_metadata_book_id_fk")
+}
+
+model book_progress {
+  book_id   Int       @id
+  position  String?   @db.VarChar(255)
+  page      Int?      @default(0)
+  last_read DateTime? @default(now()) @db.DateTime(0)
+  book      book      @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "book_current_book_id_fk")
+}
+
+model shelf {
+  id   Int    @id @default(autoincrement())
+  path String @unique(map: "shelf_path_uindex") @db.VarChar(255)
+  name String @unique(map: "shelf_name_uindex") @db.VarChar(255)
+  book book[]
+}
+
+model user {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique(map: "user_username_uindex") @db.VarChar(64)
+  email      String   @unique(map: "user_email_uindex") @db.VarChar(255)
+  password   String   @db.VarChar(255)
+  created    DateTime @default(now()) @db.DateTime(0)
+  last_login DateTime @default(now()) @db.DateTime(0)
+  avatar     String?  @db.VarChar(32)
+}

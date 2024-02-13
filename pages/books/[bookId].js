@@ -253,12 +253,20 @@ export default function BookId(props) {
      */
     function getChapFromCfi(cfi) {
         let prev = null;
+        // TODO fix current chapter bug
+        //let found = false;
         flattenNav(navigation).forEach(s => {
             if (s.cfi !== null) {
+                //console.log(cfi, s);
                 if (new EpubCFI().compare(cfi, s.cfi) === -1) {
+                    //if(prev && !found) {
+                    //    found = true;
+                    //}
                     return;
                 }
+                //if(!found) {
                 prev = s;
+                //}
             }
         })
         return prev;
